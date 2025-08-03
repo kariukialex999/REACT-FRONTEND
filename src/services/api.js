@@ -1,4 +1,16 @@
-const API_KEY = "nj272ebdu282ge2fnu74fbeqg7";
+require('dotenv').config();
+const API_KEY = process.env.TMDB_API_KEY;
+if (!API_KEY) {
+    throw new Error("TMDB_API_KEY is not defined in the environment variables");
+}
+if (!process.env.TMDB_API_KEY) {
+    throw new Error("TMDB_API_KEY is not set in the environment variables");
+}
+if (API_KEY === "") {
+    throw new Error("TMDB_API_KEY is empty");   
+}
+
+
 const BASE_URL = "https://api.themovidb.org/3"
 
 export const getPopularMovies = async () => {
