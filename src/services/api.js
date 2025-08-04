@@ -1,4 +1,3 @@
-require('dotenv').config('./service/.env');
 const API_KEY = process.env.TMDB_API_KEY;
 if (!API_KEY) {
     throw new Error("TMDB_API_KEY is not defined in the environment variables");
