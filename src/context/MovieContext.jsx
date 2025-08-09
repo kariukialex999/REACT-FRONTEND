@@ -11,9 +11,10 @@ export const MovieProvider = ({children}) => {
 
     //local storage helps us store some data within our browser
     useEffect(() => {
-        const storedFavorites = localStorage.getItem("favorites");
-        if (storedFavorites) {
-            setFavorites(JSON.parse(storedFavorites));
+        const storedFavs = localStorage.getItem("favorites");
+
+        if (storedFavs) {
+            setFavorites(JSON.parse(storedFavs));
         }
     }, [])
     
@@ -41,7 +42,7 @@ export const MovieProvider = ({children}) => {
     }
 
     //value is a key work in the provider
-    return <movieContext.Provider value={value}>
+    return <MovieContext.Provider value={value}>
         {children}
-    </movieContext.Provider>
+    </MovieContext.Provider>
 }

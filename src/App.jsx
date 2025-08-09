@@ -1,7 +1,7 @@
 import './css/App.css';
 import Home from './pages/Home';
 import Favorite from './pages/Favorite';
-import {Routes, Route} from "react-router-dom"
+import {Routes, Route} from "react-router-dom";
 import { MovieProvider } from './context/MovieContext';
 import NavBar from './components/Navbar';
 
@@ -19,4 +19,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
