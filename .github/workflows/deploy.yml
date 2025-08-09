@@ -1,0 +1,54 @@
+name: CI/CD with Vercel (Preview + Production)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        id: vercel
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            DEPLOY_URL=$(vercel --token=$VERCEL_TOKEN --confirm --scope=$VERCEL_ORG_ID --prebuilt | tail -n 1)
+          else
+            DEPLOY_URL=$(vercel --prod --token=$VERCEL_TOKEN --confirm --scope=$VERCEL_ORG_ID --prebuilt | tail -n 1)
+          fi
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Comment preview URL on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            🚀 **Vercel Preview Ready!**
+            🌐 [View Deployment](${{ steps.vercel.outputs.deploy_url }})
